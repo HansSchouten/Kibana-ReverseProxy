@@ -31,6 +31,8 @@ if ($postvars) {
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
 }
+// set connection timeout
+curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
 // execute curl request
 $response = curl_exec($ch);
@@ -40,6 +42,9 @@ curl_close($ch);
 list($header, $body) = explode("\r\n\r\n", $response, 2);
 $headerLines = explode("\n",$header);
 foreach ($headerLines as $headerLine) {
+    // response to client is not chuncked, so skip this header
+    if (strpos($headerLine, "Transfer-Encoding: chunked") === 0) continue;
+    // set header
     header($headerLine);
 }
 
