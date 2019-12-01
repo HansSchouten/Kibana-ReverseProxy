@@ -11,8 +11,11 @@ if (isset($_POST) && empty($_POST)) {
     $rest_json = file_get_contents("php://input");
     if ($rest_json) {
         $postvars = $rest_json;
-        //set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        // set the content type to application/json and default xsrf token
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type:application/json'
+            'kbn-xsrf: kibana'
+        ]);
     }
 } else {
     if (isset($_POST)) {
